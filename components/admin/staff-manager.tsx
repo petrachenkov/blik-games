@@ -51,7 +51,7 @@ function AssignForm({ games }: { games: Game[] }) {
 
   async function handleSave() {
     if (!found) return;
-    if (gameIds.length === 0) {
+    if (role !== "superadmin" && gameIds.length === 0) {
       toast.error("Выберите хотя бы одну игру");
       return;
     }
