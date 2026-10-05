@@ -32,7 +32,7 @@ RUN npm run build
 # с devDependencies, а не урезанный runner.
 # ---------------------------------------------------------
 FROM builder AS migrator
-CMD ["npx", "drizzle-kit", "migrate"]
+CMD ["sh", "-c", "npx drizzle-kit migrate && node db/seed-games.mjs"]
 
 # ---------------------------------------------------------
 # Продакшен-образ
