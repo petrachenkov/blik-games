@@ -21,9 +21,6 @@ export function SiteHeader() {
           <Link href="/team" className="transition-colors hover:text-foreground">
             Кабинет капитана
           </Link>
-          <Link href="/admin" className="transition-colors hover:text-foreground">
-            Админ
-          </Link>
         </nav>
       </div>
     </header>

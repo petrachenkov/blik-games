@@ -68,10 +68,10 @@ export default function TeamAuthPage() {
 
           <Tabs defaultValue="login">
             <TabsList className="mb-6 w-full">
-              <TabsTrigger value="login" className="flex-1">
+              <TabsTrigger value="login" className="flex-1 justify-center">
                 Войти
               </TabsTrigger>
-              <TabsTrigger value="signup" className="flex-1">
+              <TabsTrigger value="signup" className="flex-1 justify-center">
                 Регистрация
               </TabsTrigger>
             </TabsList>
