@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.env
+.env.local
+npm-debug.log*
+Dockerfile
+.dockerignore
+README.md
+supabase
+uploads
+.tools
+.claude
+*.tsbuildinfo
