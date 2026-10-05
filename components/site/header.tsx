@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Trophy } from "lucide-react";
+import { Trophy, UserRound } from "lucide-react";
 
 export function SiteHeader() {
   return (
@@ -22,6 +22,14 @@ export function SiteHeader() {
             Кабинет капитана
           </Link>
         </nav>
+        <Link
+          href="/team"
+          aria-label="Кабинет капитана"
+          title="Кабинет капитана"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground sm:hidden"
+        >
+          <UserRound className="h-5 w-5" />
+        </Link>
       </div>
     </header>
   );

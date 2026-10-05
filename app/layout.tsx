@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Blik Games — киберспортивный хаб колледжа",
+  title: "Blik Games — Тверской колледж им. А. Н. Коняева",
   description:
     "Турниры по Brawl Stars, CS2, Dota 2, Valorant и другим играм. Собирай команду и участвуй в киберспортивных турнирах колледжа.",
 };

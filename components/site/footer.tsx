@@ -17,7 +17,7 @@ export function SiteFooter({
           </div>
           <div>
             <div className="font-display text-sm font-bold">Blik Games</div>
-            <div className="text-xs text-muted-foreground">Киберспортивный хаб колледжа</div>
+            <div className="text-xs text-muted-foreground">Тверской колледж им. А. Н. Коняева</div>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">

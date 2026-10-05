@@ -20,7 +20,7 @@ export function Hero({ tournament }: { tournament: Tournament | null }) {
 
       <div className="container flex flex-col items-center gap-8 py-16 text-center sm:py-24">
         <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Киберспортивный хаб колледжа
+          Тверской колледж им. А. Н. Коняева
         </span>
         <h1 className="max-w-3xl text-balance font-display text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
           Собери команду.
