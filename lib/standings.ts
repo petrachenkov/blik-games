@@ -52,5 +52,26 @@ export function computeStandings(teams: MinimalTeam[], matches: MinimalMatch[]):
     }
   }
 
-  return rows.sort((x, y) => y.wins - x.wins || y.scoreDiff - x.scoreDiff);
+  // Порядок по правилам турнира: победы → личная встреча (для двух команд — прямой матч,
+  // для трёх и больше — мини-таблица между ними) → разница трофеев.
+  const finished = matches.filter((m) => m.status === "finished");
+  const byWins = new Map<number, StandingRow[]>();
+  for (const row of rows) byWins.set(row.wins, [...(byWins.get(row.wins) ?? []), row]);
+
+  const result: StandingRow[] = [];
+  for (const wins of [...byWins.keys()].sort((x, y) => y - x)) {
+    const tied = byWins.get(wins)!;
+    const tiedIds = new Set(tied.map((r) => r.teamId));
+    const miniWins = new Map(tied.map((r) => [r.teamId, 0]));
+    for (const m of finished) {
+      if (!m.team_a_id || !m.team_b_id || !tiedIds.has(m.team_a_id) || !tiedIds.has(m.team_b_id)) continue;
+      const scoreA = m.score_a ?? 0;
+      const scoreB = m.score_b ?? 0;
+      if (scoreA > scoreB) miniWins.set(m.team_a_id, miniWins.get(m.team_a_id)! + 1);
+      else if (scoreB > scoreA) miniWins.set(m.team_b_id, miniWins.get(m.team_b_id)! + 1);
+    }
+    tied.sort((x, y) => miniWins.get(y.teamId)! - miniWins.get(x.teamId)! || y.scoreDiff - x.scoreDiff);
+    result.push(...tied);
+  }
+  return result;
 }
