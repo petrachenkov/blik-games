@@ -55,21 +55,30 @@ export async function disqualifyTeam(teamId: string, tournamentId: string, reaso
     .from(matches)
     .where(and(eq(matches.tournament_id, tournamentId), or(eq(matches.team_a_id, teamId), eq(matches.team_b_id, teamId)), ne(matches.status, "finished")));
 
+  // Технический счёт матча — всегда 2:0, как обычная победа без решающего режима
+  // (раньше здесь стоял win_target, из-за чего в группе технарь считался как 1:0, а в финале
+  // как 3:0 — оба раза не совпадало с тем, как выглядит нормальная победа 2:0 по режимам).
+  const TECH_WIN_MODES = 2;
+
   for (const m of pendingMatches) {
     const opponentId = m.team_a_id === teamId ? m.team_b_id : m.team_a_id;
     if (!opponentId) continue; // соперник ещё не определён (пустой слот плей-офф) — нечего форфейтить
 
-    const scoreA = m.team_a_id === teamId ? 0 : m.win_target;
-    const scoreB = m.team_b_id === teamId ? 0 : m.win_target;
-    // Внутри каждого режима тоже фиксируем технический счёт (win_target:0 в пользу соперника),
-    // иначе при повторном открытии редактора режимов счёт покажет 0:0 без победителя.
+    const scoreA = m.team_a_id === teamId ? 0 : TECH_WIN_MODES;
+    const scoreB = m.team_b_id === teamId ? 0 : TECH_WIN_MODES;
+    // Засчитываем технический счёт только в первых двух режимах (решающий — не нужен, как и при
+    // обычной победе 2:0), иначе при повторном открытии редактора режимов счёт покажет 0:0 без победителя.
     const modesPlan: ModesPlanEntry[] = Array.isArray(m.modes_plan)
-      ? m.modes_plan.map((entry) => ({
-          ...entry,
-          scoreA: m.team_a_id === teamId ? 0 : m.win_target,
-          scoreB: m.team_b_id === teamId ? 0 : m.win_target,
-          winnerTeamId: opponentId,
-        }))
+      ? m.modes_plan.map((entry, i) =>
+          i < TECH_WIN_MODES
+            ? {
+                ...entry,
+                scoreA: m.team_a_id === teamId ? 0 : m.win_target,
+                scoreB: m.team_b_id === teamId ? 0 : m.win_target,
+                winnerTeamId: opponentId,
+              }
+            : entry
+        )
       : m.modes_plan;
 
     await db.update(matches).set({ score_a: scoreA, score_b: scoreB, modes_plan: modesPlan, status: "finished" }).where(eq(matches.id, m.id));
